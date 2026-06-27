@@ -5,13 +5,42 @@ let todoArea = document.getElementById("todos");
 let completedArea = document.getElementById("completed");
 let clearAllTodos = document.getElementById("clear-todos");
 let clearCompleteTodos = document.getElementById("clear-complete-todos");
+let msg = document.getElementById("active-msg");
+let doneMsg = document.getElementById("done-msg");
 
-const TodoDB = JSON.parse(localStorage.getItem("todos_data")) || [];
-const CompleteTodoDB = JSON.parse(localStorage.getItem("completed_todos")) || [];
+let TodoDB = [];
+let CompleteTodoDB = [];
+
+function loadfromLocalStorage() {
+  TodoDB = JSON.parse(localStorage.getItem("todos_data")) || [];
+  CompleteTodoDB = JSON.parse(localStorage.getItem("completed_todos")) || [];
+}
 
 function saveLocalStorage() {
   localStorage.setItem("todos_data", JSON.stringify(TodoDB));
   localStorage.setItem("completed_todos", JSON.stringify(CompleteTodoDB));
+}
+
+function renderUI() {
+  todoArea.querySelectorAll(".todo-card").forEach((card) => card.remove());
+  completedArea.querySelectorAll(".todo-card").forEach((card) => card.remove());
+
+  loadfromLocalStorage();
+
+  TodoDB.forEach((todo) => createTodoDOM(todo, false));
+  CompleteTodoDB.forEach((todo) => createTodoDOM(todo, true));
+
+  if (TodoDB.length === 0) {
+    msg.style.display = "block";
+  } else {
+    msg.style.display = "none";
+  }
+
+  if (CompleteTodoDB.length === 0) {
+    doneMsg.style.display = "block";
+  } else {
+    doneMsg.style.display = "none";
+  }
 }
 
 function HandleAddTodo() {
@@ -25,13 +54,14 @@ function HandleAddTodo() {
     description: desc.value,
   };
 
+  loadfromLocalStorage();
+
   // push the object into the array
   TodoDB.push(newTodo);
 
   saveLocalStorage();
 
-  // pass the object as a argument
-  TodoUI(newTodo, false);
+  renderUI();
 
   // empty input fields
   title.value = "";
@@ -39,17 +69,19 @@ function HandleAddTodo() {
 }
 
 // UI Part
-function TodoUI(todoObj, isCompleted = false) {
+function createTodoDOM(todoObj, isCompleted) {
   // create elements
   const wrapper = document.createElement("div");
+  wrapper.className = "todo-card";
+
   const TodoTitle = document.createElement("h2");
   const TodoDesc = document.createElement("p");
   const Completed = document.createElement("input");
   const TodoDeleteBtn = document.createElement("button");
-  TodoDeleteBtn.innerText = "Delete";
 
   Completed.type = "checkbox";
   Completed.checked = isCompleted;
+  TodoDeleteBtn.innerText = "Delete";
 
   // add data
   TodoTitle.innerText = todoObj.title;
@@ -63,80 +95,64 @@ function TodoUI(todoObj, isCompleted = false) {
   wrapper.appendChild(Completed);
   wrapper.appendChild(TodoDeleteBtn);
   todoArea.append(wrapper);
-    
-    if (isCompleted) {
-        TodoTitle.style.textDecoration = "line-through";
-        TodoDesc.style.textDecoration = "line-through";
-        completedArea.append(wrapper);
-    } else {
-        todoArea.append(wrapper);
-    }
+
+  if (isCompleted) {
+    TodoTitle.style.textDecoration = "line-through";
+    TodoDesc.style.textDecoration = "line-through";
+    completedArea.append(wrapper);
+  } else {
+    todoArea.append(wrapper);
+  }
 
   // complete task logic
   Completed.addEventListener("change", (event) => {
-    const checked = TodoDB.findIndex((elem) => elem.id === todoObj.id);
+    loadfromLocalStorage();
+
     if (event.target.checked) {
-      if (checked !== -1) {
-        let item = TodoDB.splice(checked, 1)[0];
+      const idx = TodoDB.findIndex((elem) => elem.id === todoObj.id);
+
+      if (idx !== -1) {
+        let item = TodoDB.splice(idx, 1)[0];
         CompleteTodoDB.push(item);
-
-        completedArea.append(wrapper);
-
-        TodoTitle.style.textDecoration = "line-through";
-        TodoDesc.style.textDecoration = "line-through";
-
-        saveLocalStorage();
       }
     } else {
-      const unchecked = CompleteTodoDB.findIndex(
-        (elem) => elem.id === todoObj.id,
-      );
-      if (unchecked !== -1) {
-        let uncheckeditem = CompleteTodoDB.splice(unchecked, 1)[0];
+      const idx = CompleteTodoDB.findIndex((elem) => elem.id === todoObj.id);
+      if (idx !== -1) {
+        let uncheckeditem = CompleteTodoDB.splice(idx, 1)[0];
         TodoDB.push(uncheckeditem);
-
-        todoArea.append(wrapper);
-
-        TodoTitle.style.textDecoration = "none";
-        TodoDesc.style.textDecoration = "none";
-
-        saveLocalStorage();
       }
     }
 
+    saveLocalStorage();
+    renderUI();
   });
 
   // delete button logic
   TodoDeleteBtn.addEventListener("click", (event) => {
-    // find dataset id Convert it into number by default it string
-    const datasetID = Number(event.target.dataset.id);
+    loadfromLocalStorage();
 
-    // find index and match with dataset ID
-    const index = TodoDB.findIndex((v) => v.id === datasetID);
+    const activeIdx = TodoDB.findIndex((v) => v.id === todoObj.id);
+    if (activeIdx !== -1) TodoDB.splice(activeIdx, 1);
 
-    // if found delete it from array
-    if (index !== -1) {
-      TodoDB.splice(index, 1);
-    }
-
-    // find index and match with dataset ID in complete task db
-    const compindex = CompleteTodoDB.findIndex((v) => v.id === datasetID);
-
-    // if found delete it from array
-    if (compindex !== -1) {
-      CompleteTodoDB.splice(index, 1);
-    }
+    const compIdx = CompleteTodoDB.findIndex((v) => v.id === todoObj.id);
+    if (compIdx !== -1) CompleteTodoDB.splice(compIdx, 1);
 
     saveLocalStorage();
-    // remove the element from ui
-    // event.target.parentElement.remove();
-    wrapper.remove();
-
-    console.log(TodoDB);
+    renderUI();
   });
 }
 
-TodoDB.forEach((todo) => TodoUI(todo, false));
-CompleteTodoDB.forEach((todo) => TodoUI(todo, true));
+// --- CLEAR BUTTONS LOGIC ---
+clearAllTodos.addEventListener("click", () => {
+  localStorage.removeItem("todos_data");
+  renderUI(); // 🔄 UI auto sync
+});
+
+clearCompleteTodos.addEventListener("click", () => {
+  localStorage.removeItem("completed_todos");
+  renderUI(); // 🔄 UI auto sync
+});
+
+renderUI();
 
 btn.addEventListener("click", HandleAddTodo);
