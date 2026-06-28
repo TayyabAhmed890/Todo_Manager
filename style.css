@@ -2,7 +2,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: cursive;
+  font-family: 'Comic Neue',sans-serif;
+  font-weight: 600;
 }
 
 html,body{
@@ -103,7 +104,6 @@ html,body{
   padding: 8px;
   display: flex;
   flex-direction: column;
-  font-family: cursive;
   gap: 10px;
   
 }
@@ -128,7 +128,6 @@ label{
   box-shadow: -2px 4px;
   border-radius: 3px;
   padding: 5px;
-  font-family: cursive;
   font-size: medium;
 }
 
@@ -142,7 +141,6 @@ label{
   gap: 10px;
 }
 .todo-card {
-  font-family: cursive;
   border-radius: 5px;
   border: 2px solid black;
   box-shadow: -2px 4px;
@@ -173,7 +171,6 @@ label{
   border: 2px solid black;
   border-radius: 3px;
   padding: 3px;
-  font-family: cursive;
   font-size: medium;
 }
 
