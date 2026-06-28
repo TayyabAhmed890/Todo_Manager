@@ -8,6 +8,10 @@ let clearCompleteTodos = document.getElementById("clear-complete-todos");
 let msg = document.getElementById("active-msg");
 let doneMsg = document.getElementById("done-msg");
 
+let changeColor1 = document.querySelector(".change-color1");
+let changeColor2 = document.querySelector(".change-color2");
+let changeColor3 = document.querySelector(".change-color3");
+
 let TodoDB = [];
 let CompleteTodoDB = [];
 
@@ -21,11 +25,25 @@ function saveLocalStorage() {
   localStorage.setItem("completed_todos", JSON.stringify(CompleteTodoDB));
 }
 
+let activeTodosContainer;
+let completedTodosContainer;
+
 function renderUI() {
-  todoArea.querySelectorAll(".todo-card").forEach((card) => card.remove());
-  completedArea.querySelectorAll(".todo-card").forEach((card) => card.remove());
+  todoArea.querySelectorAll(".todo-parent").forEach((card) => card.remove());
+  completedArea
+    .querySelectorAll(".todo-parent")
+    .forEach((card) => card.remove());
 
   loadfromLocalStorage();
+
+  activeTodosContainer = document.createElement("div");
+  activeTodosContainer.className = "todo-parent";
+
+  completedTodosContainer = document.createElement("div");
+  completedTodosContainer.className = "todo-parent";
+
+  todoArea.append(activeTodosContainer);
+  completedArea.append(completedTodosContainer);
 
   TodoDB.forEach((todo) => createTodoDOM(todo, false));
   CompleteTodoDB.forEach((todo) => createTodoDOM(todo, true));
@@ -41,6 +59,8 @@ function renderUI() {
   } else {
     doneMsg.style.display = "none";
   }
+
+  applySavedColor();
 }
 
 function HandleAddTodo() {
@@ -71,17 +91,33 @@ function HandleAddTodo() {
 // UI Part
 function createTodoDOM(todoObj, isCompleted) {
   // create elements
+
   const wrapper = document.createElement("div");
   wrapper.className = "todo-card";
 
+  const text = document.createElement("div");
+  text.className = "todo-text";
   const TodoTitle = document.createElement("h2");
   const TodoDesc = document.createElement("p");
-  const Completed = document.createElement("input");
+  const actions = document.createElement("div");
+  actions.className = "todo-actions";
   const TodoDeleteBtn = document.createElement("button");
 
+  const checkLabel = document.createElement("label");
+  checkLabel.className = "check";
+
+  const customCheckmark = document.createElement("span");
+  customCheckmark.className = "checkmark";
+
+  const Completed = document.createElement("input");
   Completed.type = "checkbox";
   Completed.checked = isCompleted;
+
   TodoDeleteBtn.innerText = "Delete";
+  TodoDeleteBtn.className = "Delete-btn";
+
+  checkLabel.appendChild(Completed);
+  checkLabel.appendChild(customCheckmark);
 
   // add data
   TodoTitle.innerText = todoObj.title;
@@ -90,18 +126,24 @@ function createTodoDOM(todoObj, isCompleted) {
   // btn id equals to todo object id
   TodoDeleteBtn.dataset.id = todoObj.id;
 
-  wrapper.appendChild(TodoTitle);
-  wrapper.appendChild(TodoDesc);
-  wrapper.appendChild(Completed);
-  wrapper.appendChild(TodoDeleteBtn);
-  todoArea.append(wrapper);
+  let currentSavedColor = sessionStorage.getItem("selected_theme");
+  if (currentSavedColor) {
+    TodoDeleteBtn.style.backgroundColor = currentSavedColor;
+  }
+
+  text.appendChild(TodoTitle);
+  text.appendChild(TodoDesc);
+  actions.appendChild(TodoDeleteBtn);
+  actions.appendChild(checkLabel);
+  wrapper.appendChild(text);
+  wrapper.appendChild(actions);
 
   if (isCompleted) {
     TodoTitle.style.textDecoration = "line-through";
     TodoDesc.style.textDecoration = "line-through";
-    completedArea.append(wrapper);
+    completedTodosContainer.append(wrapper);
   } else {
-    todoArea.append(wrapper);
+    activeTodosContainer.append(wrapper);
   }
 
   // complete task logic
@@ -145,13 +187,42 @@ function createTodoDOM(todoObj, isCompleted) {
 // --- CLEAR BUTTONS LOGIC ---
 clearAllTodos.addEventListener("click", () => {
   localStorage.removeItem("todos_data");
+  TodoDB = [];
   renderUI(); // 🔄 UI auto sync
 });
 
 clearCompleteTodos.addEventListener("click", () => {
   localStorage.removeItem("completed_todos");
+  CompleteTodoDB = [];
   renderUI(); // 🔄 UI auto sync
 });
+
+function changeAppButtonsColor(color) {
+  let AllBtns = document.querySelectorAll("button");
+  AllBtns.forEach((btn) => {
+    btn.style.backgroundColor = color;
+  });
+}
+
+changeColor1.addEventListener("click", () => {
+  sessionStorage.setItem("selected_theme", "lightblue");
+  changeAppButtonsColor("lightblue");
+});
+changeColor2.addEventListener("click", () => {
+  sessionStorage.setItem("selected_theme", "lightgreen");
+  changeAppButtonsColor("lightgreen");
+});
+changeColor3.addEventListener("click", () => {
+  sessionStorage.setItem("selected_theme", "lightpink");
+  changeAppButtonsColor("lightpink");
+});
+
+function applySavedColor() {
+  let savedColor = sessionStorage.getItem("selected_theme");
+  if (savedColor) {
+    changeAppButtonsColor(savedColor);
+  }
+}
 
 renderUI();
 

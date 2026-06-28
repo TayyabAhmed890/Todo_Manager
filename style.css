@@ -1,6 +1,331 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: cursive;
 }
 
+html,body{
+    height: 100%;
+    width: 100%;
+}
+
+#header {
+  padding: 10px;
+  border-bottom: 2px solid black;
+}
+
+#parent-change-color{
+  border: 2px solid black;
+  width: 50px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: absolute;
+  right: 2px;
+  top: 100px;
+  box-shadow: -2px 4px;
+  border-radius: 6px;
+}
+
+.change-color1{
+  background-color: lightblue;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.change-color2{
+  background-color: lightgreen;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.change-color3{
+  background-color: lightpink;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+#body {
+  padding: 10px;
+  width: auto;
+  min-height: 100vh;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+#seprate-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+#todo-input {
+  border-radius: 7px;
+  border: 2px solid black;
+  box-shadow: -3px 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 400px;
+  height: auto;
+  justify-content: center;
+}
+
+#title {
+  padding: 8px;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+
+
+#desc {
+  border-radius: 3px;
+  border: 2px solid black;
+  padding: 8px;
+}
+
+#create-todo {
+  padding: 7px;
+}
+.sections-head-style {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  font-family: cursive;
+  gap: 10px;
+  
+}
+
+.txt {
+  text-align: center;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 5px;
+}
+
+label{
+  font-size: medium;
+}
+
+.btn {
+  border: 2px solid black;
+  box-shadow: -2px 4px;
+  border-radius: 3px;
+  padding: 5px;
+  font-family: cursive;
+  font-size: medium;
+}
+
+.btn:active{
+  transform: scale(0.95);
+}
+
+.todo-parent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.todo-card {
+  font-family: cursive;
+  border-radius: 5px;
+  border: 2px solid black;
+  box-shadow: -2px 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 370px;
+  word-wrap: break-word;
+}
+
+.todo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px;
+}
+
+.todo-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.Delete-btn {
+  box-shadow: -2px 4px;
+  border: 2px solid black;
+  border-radius: 3px;
+  padding: 3px;
+  font-family: cursive;
+  font-size: medium;
+}
+
+.Delete-btn:active{
+  transform: scale(0.95);
+}
+
+/* Container (Label) ki styling */
+.check {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+/* Asli input ko chupati hain */
+.check input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Naya custom empty box (jo input ki jagah dikhega) */
+.check .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 3px;
+  box-shadow: -1px 2px;
+  transition: all 0.2s ease;
+}
+
+/* 🎯 AAPKA WALA CASE: Jab input checked ho to checkmark (box) ka background badle */
+/* .check input:checked ~ .checkmark {
+  background-color: black; Apni marzi ka color lagayein
+} */
+
+/* Tik mark ka nishan (By default hidden) */
+.check .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+/* Jab input checked ho, to andar ka Tik mark nishan show ho jaye */
+.check input:checked ~ .checkmark::after {
+  display: block;
+}
+
+footer{
+    border-top: 2px solid black;
+    text-align: center;
+    padding: 10px;
+}
+
+@media(max-width:900px){
+  #navbar{
+    height: 50px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+  }
+  #parent-change-color{
+    top: 0;
+    right: auto;
+    flex-direction: row;
+    width: auto;
+    border: none;
+    box-shadow: none;
+  }
+  .change-color1{
+  background-color: lightblue;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  
+}
+.change-color2{
+  background-color: lightgreen;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  
+}
+.change-color3{
+  background-color: lightpink;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  
+}
+    #navbar{
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .sections-head-style{
+        margin: 5px 0;
+    }
+    #todo-input{
+      width: 350px;
+    }
+    .todo-parent{
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 0;
+    }
+    .todo-card{
+        width: 340px;
+    }
+}
+
+@media (min-width:1100px) {
+  #todo-input{
+    border: 3px solid black
+  }
+  .todo-card{
+        width: 440px;
+        font-size: larger;
+        border: 3px solid black;
+  }
+
+.todo-actions {
+  align-items: center;
+
+}
+
+.Delete-btn {
+  font-size: 20px;
+}
+
+.btn{
+  font-size: larger;
+}
+
+label{
+  font-size: larger;
+
+}
+}

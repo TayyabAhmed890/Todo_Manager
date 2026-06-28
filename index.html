@@ -10,29 +10,42 @@
     <header id="header">
         <nav id="navbar">
             <h1>TodoApp</h1>
+            <div id="parent-change-color">
+                <span class="change-color1"></span>
+                <span class="change-color2"></span>
+                <span class="change-color3"></span>
+            </div>
         </nav>
     </header>
     <main id="body">
+        <div id="seprate-input">
         <section id="todo-input">
-            <label>Title</label>
-            <input type="text" name="title" id="title">
-            <label>Description</label>
-            <textarea name="desc" id="desc"></textarea>
-            <button id="create-todo">Add</button>
+                <label>Title</label>
+                <input type="text" name="title" id="title">
+                <label>Description</label>
+                <textarea name="desc" id="desc"></textarea>
+                <button id="create-todo" class="btn">Add</button>
+            </section>
+        </div>
+        <section id="todos" class="sections-head-style">
+            <div class="heading">
+                <h1>Todos</h1>
+                <button id="clear-todos" class="btn">Clear</button>
+            </div>
+            <h4 id="active-msg" class="txt">No Active Task</h4>
         </section>
-        <section id="todos">
-            <h1>Todos</h1>
-            <button id="clear-todos">Clear</button>
-            <h4 id="active-msg">No Active Task</h4>
-        </section>
-        <section id="completed">
-            <h1>Completed</h1>
-            <button id="clear-complete-todos">Clear</button>
-            <h4 id="done-msg">No Completed Task</h4>
+        <section id="completed" class="sections-head-style">
+            <div class="heading">
+                <h1>Completed</h1>
+                <button id="clear-complete-todos" class="btn">Clear</button>
+            </div>
+            <h4 id="done-msg" class="txt">No Completed Task</h4>
         </section>
     </main>
+    
+    
     <footer>
-
+        <h3>Develop by: Tayyab Ahmed</h3>
     </footer>
     <script src="script.js"></script>
 </body>
