@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Comic Neue',sans-serif;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 html,body{
@@ -157,6 +157,10 @@ label{
   flex-direction: column;
   gap: 3px;
   padding: 4px;
+}
+
+.todo-text>h2{
+  font-weight: bolder;
 }
 
 .todo-actions {
