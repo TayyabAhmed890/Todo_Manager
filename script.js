@@ -204,23 +204,50 @@ function changeAppButtonsColor(color) {
   });
 }
 
+function resetActiveScale(){
+  changeColor1.classList.remove('active')
+  changeColor2.classList.remove('active')
+  changeColor3.classList.remove('active')
+}
+
 changeColor1.addEventListener("click", () => {
   sessionStorage.setItem("selected_theme", "lightblue");
   changeAppButtonsColor("lightblue");
+
+  resetActiveScale();
+  changeColor1.classList.add('active')
 });
 changeColor2.addEventListener("click", () => {
   sessionStorage.setItem("selected_theme", "lightgreen");
   changeAppButtonsColor("lightgreen");
+
+  resetActiveScale();
+  changeColor2.classList.add('active')
 });
 changeColor3.addEventListener("click", () => {
   sessionStorage.setItem("selected_theme", "lightpink");
   changeAppButtonsColor("lightpink");
+
+  resetActiveScale();
+  changeColor3.classList.add('active')
 });
+
 
 function applySavedColor() {
   let savedColor = sessionStorage.getItem("selected_theme");
   if (savedColor) {
     changeAppButtonsColor(savedColor);
+  }
+  
+  resetActiveScale()
+
+  if(savedColor === "lightblue"){
+    changeColor1.classList.add("active")
+  }else if(savedColor === "lightgreen"){
+    changeColor2.classList.add("active") 
+  }
+  else if(savedColor === "lightpink"){
+    changeColor3.classList.add("active")
   }
 }
 

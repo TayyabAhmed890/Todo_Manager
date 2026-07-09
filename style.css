@@ -135,6 +135,11 @@ label{
   transform: scale(0.95);
 }
 
+.active{
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
 .todo-parent {
   display: flex;
   flex-wrap: wrap;
