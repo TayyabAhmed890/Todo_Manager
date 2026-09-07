@@ -33,21 +33,21 @@ html,body{
 }
 
 .change-color1{
-  background-color: lightblue;
+  background-color: skyblue;
   height: 30px;
   width: 30px;
   border-radius: 50%;
   border: 1px solid black;
 }
 .change-color2{
-  background-color: lightgreen;
+  background-color: aquamarine;
   height: 30px;
   width: 30px;
   border-radius: 50%;
   border: 1px solid black;
 }
 .change-color3{
-  background-color: lightpink;
+  background-color: lightsalmon;
   height: 30px;
   width: 30px;
   border-radius: 50%;
@@ -74,8 +74,8 @@ html,body{
 #todo-input {
   border-radius: 7px;
   border: 2px solid black;
-  box-shadow: -3px 4px;
-  padding: 10px;
+  box-shadow: -2px 4px;
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -101,8 +101,25 @@ html,body{
   font-size: 17px;
 }
 
+#priority-area{
+  /* background-color: green; */
+  padding-top: 5px;
+  display: flex;
+  gap: 7px;
+}
+
+#priority{
+  /* background-color: red; */
+  padding: 4px;
+}
+
+/* #priority>option{
+  background-color: yellow;
+} */
+
 #create-todo {
   padding: 7px;
+  margin-top: 10px;
 }
 .sections-head-style {
   padding: 8px;
@@ -172,6 +189,16 @@ label{
   font-weight: bolder;
 }
 
+.todo-priority{
+  width: 60px;
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 8px;
+}
+
 .todo-actions {
   display: flex;
   align-items: center;
@@ -223,11 +250,6 @@ label{
   transition: all 0.2s ease;
 }
 
-/* 🎯 AAPKA WALA CASE: Jab input checked ho to checkmark (box) ka background badle */
-/* .check input:checked ~ .checkmark {
-  background-color: black; Apni marzi ka color lagayein
-} */
-
 /* Tik mark ka nishan (By default hidden) */
 .check .checkmark::after {
   content: "";
@@ -269,21 +291,21 @@ footer{
     box-shadow: none;
   }
   .change-color1{
-  background-color: lightblue;
+  background-color: skyblue;
   height: 20px;
   width: 20px;
   border-radius: 50%;
   
 }
 .change-color2{
-  background-color: lightgreen;
+  background-color: aquamarine;
   height: 20px;
   width: 20px;
   border-radius: 50%;
   
 }
 .change-color3{
-  background-color: lightpink;
+  background-color: lightsalmon;
   height: 20px;
   width: 20px;
   border-radius: 50%;
