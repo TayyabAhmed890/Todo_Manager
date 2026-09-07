@@ -27,6 +27,14 @@
                 <input type="text" name="title" id="title">
                 <label>Description</label>
                 <textarea name="desc" id="desc"></textarea>
+                <div id="priority-area">
+                    <!-- <label>Priority</label> -->
+                    <select name="priority" id="priority" required>
+                    <option value="" disabled selected >Set Priority</option>
+                        <option value="High">High</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
                 <button id="create-todo" class="btn">Add</button>
             </section>
         </div>
