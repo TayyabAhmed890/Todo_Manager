@@ -1,5 +1,6 @@
 let title = document.getElementById("title");
 let desc = document.getElementById("desc");
+let prior = document.getElementById("priority");
 let btn = document.getElementById("create-todo");
 let todoArea = document.getElementById("todos");
 let completedArea = document.getElementById("completed");
@@ -65,13 +66,13 @@ function renderUI() {
 
 function HandleAddTodo() {
   // some validations
-  if (title.value.trim() === "" || desc.value.trim() === "") return;
-
+  if (title.value.trim() === "" || desc.value.trim() === "" || prior.value === "") return;
   // create object assign values
   const newTodo = {
     id: Math.floor(Math.random() * 100000),
     title: title.value,
     description: desc.value,
+    priority: prior.value,
   };
 
   loadfromLocalStorage();
@@ -86,6 +87,7 @@ function HandleAddTodo() {
   // empty input fields
   title.value = "";
   desc.value = "";
+  prior.value = "";
 }
 
 // UI Part
@@ -97,6 +99,8 @@ function createTodoDOM(todoObj, isCompleted) {
 
   const text = document.createElement("div");
   text.className = "todo-text";
+  const TodoPrior = document.createElement("p");
+  TodoPrior.className = "todo-priority"
   const TodoTitle = document.createElement("h2");
   const TodoDesc = document.createElement("p");
   const actions = document.createElement("div");
@@ -122,9 +126,18 @@ function createTodoDOM(todoObj, isCompleted) {
   // add data
   TodoTitle.innerText = todoObj.title;
   TodoDesc.innerText = todoObj.description;
+  TodoPrior.innerText = todoObj.priority;
 
   // btn id equals to todo object id
   TodoDeleteBtn.dataset.id = todoObj.id;
+
+  if(TodoPrior.innerText === "High"){
+      TodoPrior.style.color = 'red'
+      TodoPrior.style.background = 'lightpink'
+    }else{
+      TodoPrior.style.color = 'green'
+      TodoPrior.style.background = 'lightgreen'
+  }
 
   let currentSavedColor = sessionStorage.getItem("selected_theme");
   if (currentSavedColor) {
@@ -135,6 +148,7 @@ function createTodoDOM(todoObj, isCompleted) {
   text.appendChild(TodoDesc);
   actions.appendChild(TodoDeleteBtn);
   actions.appendChild(checkLabel);
+  wrapper.appendChild(TodoPrior);
   wrapper.appendChild(text);
   wrapper.appendChild(actions);
 
@@ -211,22 +225,22 @@ function resetActiveScale(){
 }
 
 changeColor1.addEventListener("click", () => {
-  sessionStorage.setItem("selected_theme", "lightblue");
-  changeAppButtonsColor("lightblue");
+  sessionStorage.setItem("selected_theme", "skyblue");
+  changeAppButtonsColor("skyblue");
 
   resetActiveScale();
   changeColor1.classList.add('active')
 });
 changeColor2.addEventListener("click", () => {
-  sessionStorage.setItem("selected_theme", "lightgreen");
-  changeAppButtonsColor("lightgreen");
+  sessionStorage.setItem("selected_theme", "aquamarine");
+  changeAppButtonsColor("aquamarine");
 
   resetActiveScale();
   changeColor2.classList.add('active')
 });
 changeColor3.addEventListener("click", () => {
-  sessionStorage.setItem("selected_theme", "lightpink");
-  changeAppButtonsColor("lightpink");
+  sessionStorage.setItem("selected_theme", "lightsalmon");
+  changeAppButtonsColor("lightsalmon");
 
   resetActiveScale();
   changeColor3.classList.add('active')
@@ -241,12 +255,12 @@ function applySavedColor() {
   
   resetActiveScale()
 
-  if(savedColor === "lightblue"){
+  if(savedColor === "skyblue"){
     changeColor1.classList.add("active")
-  }else if(savedColor === "lightgreen"){
+  }else if(savedColor === "aquamarine"){
     changeColor2.classList.add("active") 
   }
-  else if(savedColor === "lightpink"){
+  else if(savedColor === "lightsalmon"){
     changeColor3.classList.add("active")
   }
 }
