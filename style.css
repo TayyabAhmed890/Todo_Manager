@@ -321,6 +321,7 @@ footer{
     }
     #todo-input{
       width: 350px;
+      margin: 15px;
     }
     .todo-parent{
         align-items: center;
