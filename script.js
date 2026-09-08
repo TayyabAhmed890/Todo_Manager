@@ -16,6 +16,16 @@ let changeColor3 = document.querySelector(".change-color3");
 let TodoDB = [];
 let CompleteTodoDB = [];
 
+
+function handleNotifications(msg,bgcolor){
+  let box = document.createElement('span');
+  box.innerText = msg;
+  box.style.backgroundColor = bgcolor
+  box.className = "notification"
+  body.appendChild(box)
+  return box
+}
+
 function loadfromLocalStorage() {
   TodoDB = JSON.parse(localStorage.getItem("todos_data")) || [];
   CompleteTodoDB = JSON.parse(localStorage.getItem("completed_todos")) || [];
@@ -64,6 +74,10 @@ function renderUI() {
   applySavedColor();
 }
 
+let addTimeout = null;
+let removeTimeout = null;
+let domRemoveTimeout = null;
+
 function HandleAddTodo() {
   // some validations
   if (title.value.trim() === "" || desc.value.trim() === "" || prior.value === "") return;
@@ -75,21 +89,45 @@ function HandleAddTodo() {
     priority: prior.value || "null",
   };
 
-  console.log(newTodo)
-
+  // load the previous data
   loadfromLocalStorage();
-
   // push the object into the array
   TodoDB.push(newTodo);
-
+  // save again with new data
   saveLocalStorage();
 
-  renderUI();
 
+  // clear timers
+  if(addTimeout) clearTimeout(addTimeout)
+  if(removeTimeout) clearTimeout(removeTimeout)
+  if(domRemoveTimeout) clearTimeout(domRemoveTimeout)
+
+    // notification handle code
+
+  const currentNotification = handleNotifications("Todo Added Succesfully","lightgreen");
+
+  addTimeout = setTimeout(() => {
+  currentNotification.classList.add('show');
+  }, 10);
+
+  removeTimeout = setTimeout(()=>{
+    if(currentNotification){
+
+      currentNotification.classList.remove('show');
+
+      domRemoveTimeout = setTimeout(() => {
+      currentNotification.remove();
+    }, 400);
+    }
+  },3000)
+
+  renderUI();
+  
   // empty input fields
   title.value = "";
   desc.value = "";
   prior.value = "";
+
 }
 
 // UI Part
