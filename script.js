@@ -72,8 +72,10 @@ function HandleAddTodo() {
     id: Math.floor(Math.random() * 100000),
     title: title.value,
     description: desc.value,
-    priority: prior.value,
+    priority: prior.value || "null",
   };
+
+  console.log(newTodo)
 
   loadfromLocalStorage();
 
