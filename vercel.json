@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/components/login/index.html",
+      "permanent": false
+    }
+  ]
+}
