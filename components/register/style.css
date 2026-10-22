@@ -1,0 +1,279 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Comic Neue', sans-serif;
+    font-weight: 800;
+}
+
+html,
+body {
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    background: #fff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.site-header {
+    padding: 10px;
+    border-bottom: 2px solid #000;
+}
+
+.site-nav {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.brand {
+    display: inline-block;
+    color: #000;
+    font-size: 28px;
+    text-decoration: none;
+}
+
+.register-page {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 32px 16px;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 24px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: -2px 4px #000;
+}
+
+.welcome {
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.welcome h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.intro {
+    margin: 8px 0 0;
+    color: #333;
+    font-size: 17px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.field label {
+    font-size: 17px;
+}
+
+.field input {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 17px;
+}
+
+.field input:focus {
+    outline: 3px solid skyblue;
+    outline-offset: 2px;
+}
+
+.password-input-wrap {
+    position: relative;
+}
+
+.password-input-wrap input {
+    padding-right: 76px;
+}
+
+.password-toggle {
+    display: grid;
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    color: #111;
+    cursor: pointer;
+    transform: translateY(-50%);
+}
+
+.password-icon {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.password-icon-eye-off,
+.password-toggle[aria-pressed="true"] .password-icon-eye {
+    display: none;
+}
+
+.password-toggle[aria-pressed="true"] .password-icon-eye-off {
+    display: block;
+}
+
+.password-toggle:focus-visible {
+    outline: 3px solid skyblue;
+    outline-offset: 2px;
+}
+
+.password-toggle:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.text-link {
+    color: blue;
+    font-size: 15px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.register-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    width: 100%;
+    margin-top: 5px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    
+    background: rgb(142, 209, 253);
+    box-shadow: -2px 4px #000;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.register-button:hover {
+    
+    background: rgb(63, 194, 255);
+}
+
+.register-button:active {
+    transform: scale(0.97);
+}
+
+.button-spinner {
+    display: none;
+    width: 17px;
+    height: 17px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+
+.register-button[aria-busy="true"] .button-spinner {
+    display: inline-block;
+    animation: button-spin 0.7s linear infinite;
+}
+
+.register-button:disabled {
+    cursor: wait;
+    opacity: 0.78;
+}
+
+.form-status {
+    min-height: 0;
+    color: #444;
+    font-size: 14px;
+    text-align: center;
+}
+
+.form-status:empty {
+    display: none;
+}
+
+@keyframes button-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.register-button:focus-visible,
+.text-link:focus-visible,
+.brand:focus-visible {
+    outline: 3px solid skyblue;
+    outline-offset: 3px;
+}
+
+.account-prompt {
+    margin: 22px 0 0;
+    color: #333;
+    font-size: 16px;
+    text-align: center;
+}
+
+.site-footer {
+    margin-top: auto;
+    padding: 15px;
+    border-top: 2px solid #000;
+    text-align: center;
+}
+
+.site-footer p {
+    margin: 0;
+    font-size: 16px;
+}
+
+@media (max-width: 800px) {
+    .site-nav {
+        text-align: center;
+    }
+
+    .register-page {
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .register-card {
+        padding: 20px 16px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .button-spinner {
+            animation: none;
+        }
+    }
+
+    .welcome h1 {
+        font-size: 27px;
+    }
+}

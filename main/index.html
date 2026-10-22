@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoApp</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../auth/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-pending">
+    <header id="header">
+        <nav id="navbar">
+            <h1 class="navbar-brand">TodoApp</h1>
+            <div class="navbar-actions">
+                <div id="parent-change-color" role="group" aria-label="Choose button color">
+                    <button class="theme-swatch theme-classic" type="button" data-theme="classic" aria-label="Classic black and white theme" aria-pressed="true" title="Classic"></button>
+                    <button class="theme-swatch change-color1" type="button" data-theme="skyblue" aria-label="Sky blue theme" aria-pressed="false" title="Sky blue"></button>
+                    <button class="theme-swatch change-color2" type="button" data-theme="aquamarine" aria-label="Aquamarine theme" aria-pressed="false" title="Aquamarine"></button>
+                    <button class="theme-swatch change-color3" type="button" data-theme="lightsalmon" aria-label="Salmon theme" aria-pressed="false" title="Salmon"></button>
+                    <span id="selected-theme-name" class="selected-theme-name" aria-live="polite">Classic</span>
+                </div>
+                <div id="user-menu" class="user-menu" hidden>
+                    <button
+                        id="user-menu-button"
+                        class="user-menu-button"
+                        type="button"
+                        aria-label="Open account menu"
+                        aria-expanded="false"
+                        aria-controls="user-menu-panel"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20 21a8 8 0 0 0-16 0"></path>
+                            <circle cx="12" cy="8" r="4"></circle>
+                        </svg>
+                    </button>
+                    <div id="user-menu-panel" class="user-menu-panel" hidden>
+                        <p id="user-menu-name" class="user-menu-name"></p>
+                        <p id="user-menu-email" class="user-menu-email"></p>
+                        <button id="logout-button" class="btn" type="button" disabled>Log out</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main id="body">
+        <div id="todo-loading" class="todo-loading" role="status" aria-live="polite" hidden>
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <span>Loading your todos...</span>
+        </div>
+        <div id="todo-error" class="todo-error" role="alert" hidden>
+            <p id="todo-error-message"></p>
+            <button id="retry-todos" class="btn" type="button">Try again</button>
+        </div>
+        
+        <div id="seprate-input">
+            <form id="todo-input">
+                <div class="todo-form-field">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" maxlength="120" required>
+                </div>
+                <div class="todo-form-field todo-form-description">
+                    <label for="desc">Description</label>
+                    <textarea name="desc" id="desc" maxlength="1000" rows="2" required></textarea>
+                </div>
+                <div class="todo-form-field" id="priority-area">
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority" required>
+                        <option value="" disabled selected>Set priority</option>
+                        <option value="High">High</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <button id="create-todo" class="btn" type="submit">Add</button>
+            </form>
+        </div>
+        <section id="todos" class="sections-head-style">
+            <div class="heading">
+                <h1>Todos</h1>
+                <button id="clear-todos" class="btn">Clear</button>
+            </div>
+            <h4 id="active-msg" class="txt">No Active Task</h4>
+        </section>
+        <section id="completed" class="sections-head-style">
+            <div class="heading">
+                <h1>Completed</h1>
+                <button id="clear-complete-todos" class="btn">Clear</button>
+            </div>
+            <h4 id="done-msg" class="txt">No Completed Task</h4>
+        </section>
+    </main>
+    
+    
+    <footer>
+        <h3>Develop by: Tayyab Ahmed</h3>
+    </footer>
+    <!-- Auth state gates the page, and the todo module loads records for that user. -->
+    <script type="module" src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+/* ==========================================
+   1. GLOBAL STYLES & RESET
+   ========================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Comic Neue', sans-serif;
+  font-weight: 800;
+}
+
+html, body {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #fff;
+  display: flex;          /* 💡 Body ko flex container banaya */
+  flex-direction: column; /* 💡 Elements ko upar se neeche line mein laya */
+}
+
+/* Base Buttons */
+.btn, .Delete-btn {
+  border: 2px solid black;
+  box-shadow: -2px 4px black;
+  border-radius: 3px;
+  padding: 5px;
+  font-size: large;
+  background: white;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn:active, .Delete-btn:active {
+  transform: scale(0.95);
+}
+
+.btn:disabled, .Delete-btn:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.active {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+/* ==========================================
+   2. LAYOUT COMPONENTS
+   ========================================== */
+#header {
+  padding: 10px;
+  border-bottom: 2px solid black;
+}
+
+#navbar {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 52px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.navbar-brand {
+  flex: 0 0 auto;
+  line-height: 1;
+  font-size: clamp(24px, 5vw, 32px);
+}
+
+.navbar-actions {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+#user-menu {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+}
+
+#user-menu-button {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  padding: 0;
+  border: 2px solid black;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: -2px 4px black;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+#user-menu-button:hover {
+  background: #f1f1f1;
+}
+
+#user-menu-button:active {
+  transform: scale(0.95);
+}
+
+#user-menu-button:focus-visible {
+  outline: 3px solid skyblue;
+  outline-offset: 4px;
+}
+
+#user-menu-button svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+#user-menu-panel {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 10px);
+  right: 0;
+  display: flex;
+  width: min(280px, calc(100vw - 24px));
+  min-width: 220px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background: white;
+  box-shadow: -2px 4px black;
+}
+
+#user-menu[hidden],
+#user-menu-panel[hidden] {
+  display: none !important;
+}
+
+.user-menu-name,
+.user-menu-email {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.user-menu-email {
+  color: #444;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#logout-button {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 8px;
+  background: #fff;
+  color: #000;
+  text-align: center;
+}
+
+body.auth-pending #body > :not(#todo-loading),
+body.auth-pending footer {
+  visibility: hidden;
+}
+
+#todo-loading {
+  display: none;
+}
+
+#todo-loading[hidden] {
+  display: none !important;
+}
+
+body.auth-pending #todo-loading {
+  display: flex;
+}
+
+.todo-loading {
+  min-height: min(42vh, 320px);
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #333;
+  font-size: 18px;
+}
+
+.todo-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px auto;
+  padding: 14px;
+  border: 2px solid #9d2525;
+  border-radius: 5px;
+  background: #fff0f0;
+  color: #541313;
+  text-align: center;
+}
+
+.todo-error[hidden] {
+  display: none !important;
+}
+
+.todo-error p {
+  max-width: 600px;
+  overflow-wrap: anywhere;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #d8d8d8;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: todo-loading-spin 0.8s linear infinite;
+}
+
+@keyframes todo-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#body {
+  padding: 10px;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+/* Color Switcher Container */
+#parent-change-color {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4px 2px;
+}
+
+.theme-swatch {
+  display: block;
+  flex: 0 0 auto;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease, outline-color 0.15s ease;
+}
+
+.theme-swatch:hover {
+  transform: scale(1.1);
+}
+
+.theme-swatch:focus-visible {
+  outline: 3px solid #111;
+}
+
+.theme-swatch.is-selected {
+  border-color: #111;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
+}
+
+.theme-swatch.is-selected::after {
+  display: grid;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  content: "✓";
+  font-size: 10px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.selected-theme-name {
+  min-width: 58px;
+  color: #222;
+  font-size: 13px;
+  text-align: right;
+}
+
+.theme-classic {
+  background: linear-gradient(90deg, #111 50%, #fff 50%);
+  border: 2px solid #111;
+}
+
+.change-color1 { background-color: skyblue; }
+.change-color2 { background-color: aquamarine; }
+.change-color3 { background-color: lightsalmon; }
+
+/* ==========================================
+   3. TODO INPUT FORM
+   ========================================== */
+#seprate-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px 28px;
+}
+
+#todo-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 8px;
+  box-shadow: -2px 4px black;
+  background: white;
+}
+
+.todo-form-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 20px;
+}
+
+#title, #desc {
+  width: 100%;
+  min-height: 42px;
+  padding: 7px 9px;
+  border: 2px solid black;
+  border-radius: 3px;
+  background: #fff;
+  color: #000;
+  font-size: 18px;
+}
+
+#desc {
+  min-height: 62px;
+  resize: none;
+}
+
+#create-todo {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+#priority-area {
+  align-items: flex-start;
+  margin-top: 4px;
+}
+
+#priority {
+  width: auto;
+  min-height: 30px;
+  padding: 3px 7px;
+  border: 1px solid #555;
+  border-radius: 2px;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+}
+
+#todo-input input:focus,
+#todo-input textarea:focus,
+#todo-input select:focus {
+  outline: none;
+}
+
+
+
+/* ==========================================
+   4. TODO CARDS GRID
+   ========================================== */
+.sections-head-style {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between; /* Heading left pe aur Button right pe push ho jayega */
+  align-items: center;            /* Dono vertically bilkul barabar (center) rahenge */
+  width: 100%;                    /* Poori space le taake horizontal alignment sahi ho */
+  padding: 5px 10px;              /* Shuruat aur aakhir se halka sa gap */
+}
+
+/* "No Active Task" wale simple text ke liye */
+.txt {
+  text-align: center;
+  width: 100%;
+  padding: 15px 0;
+  color: #333;
+}
+
+
+.todo-parent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center; /* Desktop par layouts balance dikhenge */
+}
+
+.todo-card {
+  border-radius: 5px;
+  border: 2px solid black;
+  box-shadow: -2px 4px black;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 380px; /* Fluid dynamic width */
+  word-wrap: break-word;
+  background: white;
+}
+
+.todo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 20px;
+}
+
+.todo-priority {
+  width: auto;
+  min-width: 60px;
+  display: inline-flex;
+  margin-left: auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 6px 8px;
+  border: 2px solid black;
+}
+
+.todo-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* Custom Checkbox */
+.check {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.check input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.check .checkmark {
+  position: absolute;
+  top: 0; left: 0;
+  height: 22px; width: 22px;
+  border: 2px solid black;
+  border-radius: 3px;
+  box-shadow: -1px 2px black;
+  transition: all 0.2s ease;
+}
+.check .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px; top: 1px;
+  width: 5px; height: 10px;
+  border: solid black;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+.check input:checked ~ .checkmark::after {
+  display: block;
+}
+
+.check input:focus-visible ~ .checkmark {
+  outline: 3px solid skyblue;
+  outline-offset: 3px;
+}
+
+footer {
+  border-top: 2px solid black;
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+}
+
+/* ==========================================
+   6. RESPONSIVE MEDIA QUERIES
+   ========================================== */
+
+/* Mobile & Tablets */
+@media (max-width: 800px) {
+  #header {
+    padding: 8px 12px;
+  }
+
+  #navbar {
+    min-height: 48px;
+    gap: 10px;
+  }
+
+  .navbar-actions {
+    gap: 12px;
+  }
+
+  #parent-change-color {
+    gap: 8px;
+  }
+
+  .theme-swatch {
+    width: 32px;
+    height: 32px;
+  }
+
+  .todo-parent {
+    padding: 10px;
+  }
+
+  .todo-card {
+    max-width: 100%; /* Pure mobile viewport par fit aayega */
+  }
+
+}
+
+@media (max-width: 520px) {
+  #seprate-input {
+    padding: 16px 4px 24px;
+  }
+
+  #todo-input {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  #header {
+    padding: 8px;
+  }
+
+  #navbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .navbar-brand {
+    width: 100%;
+    font-size: 23px;
+  }
+
+  .navbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #user-menu-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  #parent-change-color {
+    gap: 8px;
+    min-width: 0;
+    
+  }
+
+  .theme-swatch {
+    width: 30px;
+    height: 30px;
+   
+  }
+
+  .selected-theme-name {
+    min-width: 52px;
+    font-size: 12px;
+   
+  }
+
+  #user-menu-panel {
+    width: min(260px, calc(100vw - 24px));
+    min-width: min(220px, calc(100vw - 24px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    animation: none;
+  }
+}
+
+/* Large Desktop Screens */
+@media (min-width: 1100px) {
+  .todo-card {
+    max-width: 380px; /* Main grid rules maintained */
+    border: 3px solid black;
+  }
+  .Delete-btn {
+    font-size: 20px;
+  }
+}
