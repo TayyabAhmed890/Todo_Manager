@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function hasValidSession() {
+      return request.auth != null
+        && request.auth.token.auth_time is int
+        && request.auth.token.auth_time >= request.time.toMillis() / 1000 - 86400;
+    }
+
+    function isOwner(userId) {
+      return hasValidSession() && request.auth.uid == userId;
+    }
+
+    // A user's signed-in identity is the only authority for their todo records.
+    match /users/{userId}/todos/{todoId} {
+      allow read, delete: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && request.resource.data.keys().hasAll([
+          "title",
+          "description",
+          "priority",
+          "completed",
+          "createdAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "title",
+          "description",
+          "priority",
+          "completed",
+          "createdAt"
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 1000
+        && request.resource.data.priority in ["High", "Low"]
+        && request.resource.data.completed == false
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if isOwner(userId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(["completed"])
+        && request.resource.data.completed is bool;
+    }
+  }
+}

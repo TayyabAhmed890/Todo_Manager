@@ -8,6 +8,8 @@ Firebase.
 
 - **Account access:** Register and sign in with email and password, or sign in with
   Google. Includes password visibility controls and password-reset email flow.
+- **24-hour sessions:** Authentication sessions expire 24 hours after the user
+  signs in. The app signs out expired sessions, including across open tabs.
 - **Private todo lists:** Each signed-in user can only access their own todos.
 - **Task management:** Add todos with a title, description, and High or Low priority;
   mark them complete, delete individual todos, or clear active/completed todos.
@@ -59,8 +61,17 @@ Firebase.
    credentials. The Firebase web configuration is intended for client use; secure
    database access with Firestore rules.
 
-5. Deploy [`firestore.rules`](./firestore.rules). These rules require authentication,
-   restrict each user to their own todo subcollection, and validate todo fields.
+5. Deploy [`firestore.rules`](./firestore.rules). These rules require a session
+   authenticated within the last 24 hours, restrict each user to their own todo
+   subcollection, and validate todo fields. With the Firebase CLI configured for
+   your project, deploy them with:
+
+   ```bash
+   firebase deploy --only firestore:rules
+   ```
+
+   Redeploy the rules after changing them. The client-side expiry signs users out;
+   the deployed rules also reject Firestore requests after the 24-hour limit.
 
 ## Run locally
 

@@ -69,7 +69,7 @@ logoutButton.addEventListener("click", async () => {
 });
 
 subscribeToAuthState(
-    (user) => {
+    (user, sessionState) => {
         if (user) {
             logoutButton.disabled = false;
             userMenu.hidden = false;
@@ -107,7 +107,10 @@ subscribeToAuthState(
         if (logoutInProgress) return;
         userMenu.hidden = true;
         closeUserMenu();
-        window.location.replace("../components/login/index.html");
+        const loginUrl = sessionState?.expired
+            ? "../components/login/index.html?status=session-expired"
+            : "../components/login/index.html";
+        window.location.replace(loginUrl);
     },
     (error) => {
         document.body.classList.remove("auth-pending");

@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  getIdTokenResult,
   GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -121,7 +122,69 @@ export function subscribeToAuthState(onChange, onError) {
     throw new TypeError("The auth error callback must be a function.");
   }
 
-  return onAuthStateChanged(auth, onChange, onError);
+  let generation = 0;
+  let expirationTimer;
+  let expiredOnNextSignOut = false;
+  const reportError = (error) => {
+    if (onError) {
+      onError(error);
+    } else {
+      console.error("Unable to validate the Firebase session.", error);
+    }
+  };
+
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const currentGeneration = ++generation;
+    window.clearTimeout(expirationTimer);
+    expirationTimer = undefined;
+
+    if (!user) {
+      const sessionExpired = expiredOnNextSignOut;
+      expiredOnNextSignOut = false;
+      onChange(null, { expired: sessionExpired });
+      return;
+    }
+
+    void (async () => {
+      const tokenResult = await getIdTokenResult(user);
+      if (currentGeneration !== generation) return;
+
+      const authTime = Number(tokenResult.claims.auth_time);
+      if (!Number.isFinite(authTime)) {
+        throw new Error("Firebase did not provide a valid authentication time.");
+      }
+
+      const remainingSessionTime = authTime * 1000 + 24 * 60 * 60 * 1000 - Date.now();
+      if (remainingSessionTime <= 0) {
+        expiredOnNextSignOut = true;
+        await signOut(auth);
+        return;
+      }
+
+      const expireSession = () => {
+        if (currentGeneration !== generation) return;
+        expiredOnNextSignOut = true;
+        void signOut(auth).catch((error) => {
+          expiredOnNextSignOut = false;
+          reportError(error);
+          if (currentGeneration === generation) {
+            expirationTimer = window.setTimeout(expireSession, 60 * 1000);
+          }
+        });
+      };
+
+      expirationTimer = window.setTimeout(expireSession, remainingSessionTime);
+      onChange(user);
+    })().catch((error) => {
+      if (currentGeneration === generation) reportError(error);
+    });
+  }, reportError);
+
+  return () => {
+    generation += 1;
+    window.clearTimeout(expirationTimer);
+    unsubscribe();
+  };
 }
 
 export function getCurrentUser() {

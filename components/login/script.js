@@ -4,7 +4,8 @@ import {
     loginUser,
     loginWithGoogle,
     sendPasswordReset,
-    showToast
+    showToast,
+    subscribeToAuthState
 } from "../../auth/auth.js";
 
 const loginForm = document.querySelector("#login-form");
@@ -39,6 +40,7 @@ passwordToggle.addEventListener("click", () => {
 const loginStatus = new URLSearchParams(window.location.search).get("status");
 const loginStatusMessages = {
     "logged-out": ["You have been logged out.", "success"],
+    "session-expired": ["Your session expired after 24 hours. Please sign in again.", "info"],
     registered: ["Your account was created successfully. Please log in.", "success"],
     "registered-profile-warning": [
         "Your account was created, but your name could not be saved. Please log in.",
@@ -61,6 +63,25 @@ if (statusMessage) {
     showToast(statusMessage[0], statusMessage[1]);
     window.history.replaceState({}, "", window.location.pathname);
 }
+
+subscribeToAuthState(
+    (user, sessionState) => {
+        if (user) {
+            if (!loginInProgress) {
+                window.location.replace("../../main/index.html");
+            }
+            return;
+        }
+
+        if (sessionState?.expired) {
+            showToast("Your session expired after 24 hours. Please sign in again.", "info");
+        }
+    },
+    (error) => {
+        showToast(getAuthErrorMessage(error), "error");
+        console.error("Unable to check the existing Firebase session.", error);
+    }
+);
 
 forgotPasswordLink.addEventListener("click", async (event) => {
     event.preventDefault();
